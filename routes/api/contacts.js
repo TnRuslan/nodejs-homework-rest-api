@@ -1,7 +1,6 @@
 const express = require("express");
-const hendler = require("../../models/contacts.js");
+const hendler = require("../../models/controller.js");
 const { postSchema, putSchema } = require("./validation.js");
-const Joi = require("joi");
 
 const router = express.Router();
 
@@ -49,13 +48,13 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
-    console.log(req.body);
     const { error } = putSchema.validate(req.body);
-    console.log(error);
+
     if (error) {
       res.status(400).json({ message: "missing fields" });
       return;
     }
+
     const result = await hendler.updateContact(req.params.contactId, req.body);
     res.json(result);
   } catch (err) {
