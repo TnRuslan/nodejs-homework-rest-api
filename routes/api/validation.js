@@ -17,7 +17,12 @@ const putSchema = Joi.object({
   .min(1)
   .max(3);
 
+const favoriteShema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
 module.exports = {
   postSchema,
   putSchema,
+  favoriteShema,
 };
