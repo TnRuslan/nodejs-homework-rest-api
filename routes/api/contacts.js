@@ -7,9 +7,16 @@ const {
   updateContact,
   updateStatusContact,
 } = require("../../models/controller.js");
-const { postSchema, putSchema, favoriteShema } = require("./validation.js");
+const {
+  postSchema,
+  putSchema,
+  favoriteShema,
+} = require("./../../service/validation.js");
+const { authMiddlewar } = require("./../../middlewares/authMiddlewar");
 
 const router = express.Router();
+
+router.use(authMiddlewar);
 
 router.get("/", async (req, res, next) => {
   try {
