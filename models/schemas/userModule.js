@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const bcrypt = require("bcrypt");
+
+const saltRounds = 10;
 
 const user = new Schema({
   password: {
@@ -17,6 +20,12 @@ const user = new Schema({
     default: "starter",
   },
   token: String,
+});
+
+user.pre("save", async function () {
+  if (this.isNew) {
+    this.password = await bcrypt.hash(this.password, saltRounds);
+  }
 });
 
 const User = mongoose.model("user", user);

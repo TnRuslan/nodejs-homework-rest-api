@@ -2,16 +2,12 @@ const { User } = require("./schemas/userModule");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const saltRounds = 10;
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const registration = async ({ email, password }) => {
   try {
-    const user = await User.create({
-      email,
-      password: await bcrypt.hash(password, saltRounds),
-    });
+    const user = await User.create({ email, password });
     return user;
   } catch (error) {
     return Promise.reject(new Error("invalid email"));

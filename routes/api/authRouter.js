@@ -1,18 +1,11 @@
 const express = require("express");
 const { registration, login } = require("./../../models/authcontroller");
-const { authSchema } = require("./../../service/validation");
+const { authValidation } = require("./../../middlewares/validationMiddleware");
 
 const router = express.Router();
 
-router.post("/registration", async (req, res, next) => {
+router.post("/registration", authValidation, async (req, res, next) => {
   try {
-    const { error } = authSchema.validate(req.body);
-    if (error) {
-      error.message = "invalid email or password";
-      res.status(400).json({ message: error.message });
-      return;
-    }
-
     const user = await registration(req.body);
     res.status(201).json({
       user: {
@@ -25,15 +18,8 @@ router.post("/registration", async (req, res, next) => {
   }
 });
 
-router.post("/login", async (req, res, next) => {
+router.post("/login", authValidation, async (req, res, next) => {
   try {
-    const { error } = authSchema.validate(req.body);
-    if (error) {
-      error.message = "invalid email or password";
-      res.status(400).json({ message: error.message });
-      return;
-    }
-
     const { token, user } = await login(req.body);
     res.status(200).json({
       token,
