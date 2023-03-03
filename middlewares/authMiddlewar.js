@@ -19,14 +19,16 @@ const authMiddlewar = (req, res, next) => {
   }
 
   try {
-    const decode = jwt.decode(token, JWT_SECRET);
+    const verify = jwt.verify(token, JWT_SECRET);
 
-    if (!decode) {
+    if (!verify) {
       res.status(401).json({ message: "Wrong token" });
       return;
     }
 
-    req.user = decode;
+    req.user = verify;
+    req.token = token;
+
     next();
   } catch (error) {
     next(error);

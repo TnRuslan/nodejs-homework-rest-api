@@ -9,9 +9,12 @@ const {
 } = require("../../models/controller.js");
 const { authMiddlewar } = require("./../../middlewares/authMiddlewar");
 const {
-  postValidation,
-  putValidation,
-  patchFavoritValidation,
+  postSchema,
+  putSchema,
+  favoriteShema,
+} = require("./../../service/validation");
+const {
+  validationMiddleware,
 } = require("./../../middlewares/validationMiddleware");
 
 const router = express.Router();
@@ -20,8 +23,14 @@ router.use(authMiddlewar);
 
 router.get("/", async (req, res, next) => {
   try {
-    const contacts = await listContacts();
-    res.json({ contacts });
+    const { limit = 20, page = 0, favorite } = req.query;
+
+    let filter = {};
+    if (favorite !== undefined) {
+      filter.favorite = favorite;
+    }
+    const contacts = await listContacts(limit, page, filter);
+    res.json({ contacts, limit, page, favorite });
   } catch (err) {
     res.status(404).json({ message: "Not found" });
   }
@@ -36,7 +45,7 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", postValidation, async (req, res, next) => {
+router.post("/", validationMiddleware(postSchema), async (req, res, next) => {
   try {
     const newContact = await addContact(req.body);
     res.status(201).json(newContact);
@@ -54,18 +63,22 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", putValidation, async (req, res, next) => {
-  try {
-    const result = await updateContact(req.params.contactId, req.body);
-    res.json(result);
-  } catch (err) {
-    res.status(404).json({ message: "Not found" });
+router.put(
+  "/:contactId",
+  validationMiddleware(putSchema),
+  async (req, res, next) => {
+    try {
+      const result = await updateContact(req.params.contactId, req.body);
+      res.json(result);
+    } catch (err) {
+      res.status(404).json({ message: "Not found" });
+    }
   }
-});
+);
 
 router.patch(
   "/:contactId/favorite",
-  patchFavoritValidation,
+  validationMiddleware(favoriteShema),
   async (req, res, next) => {
     try {
       const { contactId } = req.params;
