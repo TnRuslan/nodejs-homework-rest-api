@@ -21,8 +21,19 @@ const favoriteShema = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
+const authSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+});
+
+const subscriptionSchema = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
+
 module.exports = {
   postSchema,
   putSchema,
   favoriteShema,
+  authSchema,
+  subscriptionSchema,
 };

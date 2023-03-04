@@ -1,11 +1,14 @@
 const { Contact } = require("./schemas/contact");
 
-const listContacts = async () => {
-  return Contact.find();
+const listContacts = async (limit, page, filter) => {
+  return Contact.find(filter)
+    .select({ __v: 0 })
+    .skip(page * limit)
+    .limit(limit);
 };
 
 const getContactById = async (contactId) => {
-  return Contact.findOne({ _id: contactId });
+  return Contact.findOne({ _id: contactId }).select({ __v: 0 });
 };
 
 const removeContact = async (contactId) => {
