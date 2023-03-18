@@ -1,13 +1,15 @@
 const { User } = require("./schemas/userModule");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
 require("dotenv").config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const registration = async ({ email, password }) => {
   try {
-    const user = await User.create({ email, password });
+    const avatarURL = gravatar.url(email);
+    const user = await User.create({ email, password, avatarURL });
     return user;
   } catch (error) {
     return Promise.reject(new Error("invalid email"));
