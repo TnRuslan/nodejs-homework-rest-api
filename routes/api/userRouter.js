@@ -7,6 +7,8 @@ const {
   validationMiddleware,
 } = require("./../../middlewares/validationMiddleware");
 const { subscriptionSchema } = require("./../../service/validation");
+const { upload } = require("../../middlewares/fileMiddlewar");
+const { updateAvatar } = require("../../models/fileController.js");
 
 const router = express.Router();
 
@@ -56,6 +58,8 @@ router.patch(
     }
   }
 );
+
+router.patch("/avatars", upload.single("avatar"), updateAvatar());
 
 module.exports = {
   userRouter: router,
