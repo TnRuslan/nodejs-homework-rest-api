@@ -30,10 +30,15 @@ const subscriptionSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
 
+const verifySchema = Joi.object({
+  email: Joi.string().email().required(),
+});
+
 module.exports = {
   postSchema,
   putSchema,
   favoriteShema,
   authSchema,
   subscriptionSchema,
+  verifySchema,
 };

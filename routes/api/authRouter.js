@@ -1,9 +1,14 @@
 const express = require("express");
-const { registration, login } = require("./../../models/authcontroller");
+const {
+  registration,
+  login,
+  verifyEmail,
+  resendVerifyEmail,
+} = require("./../../models/authcontroller");
 const {
   validationMiddleware,
 } = require("./../../middlewares/validationMiddleware");
-const { authSchema } = require("./../../service/validation");
+const { authSchema, verifySchema } = require("./../../service/validation");
 
 const router = express.Router();
 
@@ -37,10 +42,26 @@ router.post(
       });
     } catch (error) {
       res.status(401).json({
-        message: "Email or password is wrong",
+        message: error.message,
       });
     }
   }
 );
+
+router.get("/verify/:verificationCode", async (req, res) => {
+  try {
+    verifyEmail(req, res);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+});
+
+router.post("/verify", validationMiddleware(verifySchema), async (req, res) => {
+  try {
+    resendVerifyEmail(req, res);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+});
 
 module.exports = { authRouter: router };
