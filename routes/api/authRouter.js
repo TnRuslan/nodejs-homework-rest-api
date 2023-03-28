@@ -4,64 +4,18 @@ const {
   login,
   verifyEmail,
   resendVerifyEmail,
-} = require("./../../models/authcontroller");
-const {
-  validationMiddleware,
-} = require("./../../middlewares/validationMiddleware");
-const { authSchema, verifySchema } = require("./../../service/validation");
+} = require("../../controllers/authcontroller");
+const { validationMiddleware } = require("../../middlewares");
+const { authSchema, verifySchema } = require("../../service/validation");
 
 const router = express.Router();
 
-router.post(
-  "/registration",
-  validationMiddleware(authSchema),
-  async (req, res, next) => {
-    try {
-      const user = await registration(req.body);
-      res.status(201).json({
-        user: {
-          email: user.email,
-          subscription: user.subscription,
-        },
-      });
-    } catch (error) {
-      res.status(409).json({ message: error.message });
-    }
-  }
-);
+router.post("/registration", validationMiddleware(authSchema), registration);
 
-router.post(
-  "/login",
-  validationMiddleware(authSchema),
-  async (req, res, next) => {
-    try {
-      const { token, user } = await login(req.body);
-      res.status(200).json({
-        token,
-        user: { email: user.email, subscription: user.subscription },
-      });
-    } catch (error) {
-      res.status(401).json({
-        message: error.message,
-      });
-    }
-  }
-);
+router.get("/verify/:verificationCode", verifyEmail);
 
-router.get("/verify/:verificationCode", async (req, res) => {
-  try {
-    verifyEmail(req, res);
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-});
+router.post("/verify", validationMiddleware(verifySchema), resendVerifyEmail);
 
-router.post("/verify", validationMiddleware(verifySchema), async (req, res) => {
-  try {
-    resendVerifyEmail(req, res);
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-});
+router.post("/login", validationMiddleware(authSchema), login);
 
 module.exports = { authRouter: router };

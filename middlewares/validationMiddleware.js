@@ -9,6 +9,4 @@ const validationMiddleware = (schema) => {
   };
 };
 
-module.exports = {
-  validationMiddleware,
-};
+module.exports = validationMiddleware;
