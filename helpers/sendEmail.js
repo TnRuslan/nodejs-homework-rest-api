@@ -13,6 +13,4 @@ const sendEmail = async (data) => {
   return true;
 };
 
-module.exports = {
-  sendEmail,
-};
+module.exports = sendEmail;

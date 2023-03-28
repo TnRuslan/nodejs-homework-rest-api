@@ -1,40 +1,32 @@
 const jwt = require("jsonwebtoken");
+const { HttpError } = require("../helpers");
 require("dotenv").config();
+
+const { User } = require("../models/userModel");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-const authMiddlewar = (req, res, next) => {
-  const authorizationHeader = req.headers["authorization"];
+const authMiddlewar = async (req, res, next) => {
+  const { authorization = "" } = req.headers;
 
-  if (!authorizationHeader) {
-    res.status(401).json({ message: "Not authorized" });
-    return;
-  }
+  const [bearer, token] = authorization.split(" ");
 
-  const [tokenType, token] = authorizationHeader.split(" ");
-
-  if (!token) {
-    res.status(401).json({ message: "Not authorized" });
-    return;
+  if (bearer !== "Bearer") {
+    next(HttpError(401));
   }
 
   try {
-    const verify = jwt.verify(token, JWT_SECRET);
-
-    if (!verify) {
-      res.status(401).json({ message: "Wrong token" });
-      return;
+    const { id } = jwt.verify(token, JWT_SECRET);
+    const user = await User.findById(id);
+    if (!user || !user.token) {
+      next(HttpError(401));
     }
 
-    req.user = verify;
-    req.token = token;
-
+    req.user = user;
     next();
   } catch (error) {
-    next(error);
+    next(HttpError(401, error.message));
   }
 };
 
-module.exports = {
-  authMiddlewar,
-};
+module.exports = authMiddlewar;
