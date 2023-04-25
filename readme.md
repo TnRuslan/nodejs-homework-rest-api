@@ -1,5 +1,3 @@
-<div align="center">
-
 # Fonebook REST API
 
 ---
