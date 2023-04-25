@@ -1,31 +1,46 @@
-## GoIT Node.js Course Template Homework
+<div align="center">
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+# Fonebook REST API
 
-Додайте ментора до колаборації
+---
 
-Для кожної домашньої роботи створюйте свою гілку.
+- The Project when you can create, edit and save your contacts.
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+- The Project is base on Node.js, Express and MongoDB.
 
-Кожна нова гілка для др повинна робитися з master
+- To run the project locally, follow these steps:
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+1. Clone the repository;
+2. Install the dependencies: `npm install`
+3. Run the following command: `npm start`;
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
+<div align="center">
 
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
+### Auth Endpoints
 
-### Команди:
+| HTTP Method | Endpoint                         | Description              |
+| ----------- | -------------------------------- | ------------------------ |
+| POST        | `/auth/registration`             | User registration        |
+| POST        | `/auth/login`                    | User login               |
+| GET         | `/auth/verify/:verificationCode` | User varification code   |
+| POST        | `/auth/verify`                   | User resend verify email |
 
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+### User Endpoints
+
+| HTTP Method | Endpoint             | Description              |
+| ----------- | -------------------- | ------------------------ |
+| GET         | `/user/current`      | Get current user         |
+| POST        | `/user/logout`       | User Log out             |
+| POST        | `/user/subscription` | Change user subscription |
+| PATCH       | `/user/avatars`      | Add user avatar          |
+
+### Contacts Endpoints
+
+| HTTP Method | Endpoint                        | Description             |
+| ----------- | ------------------------------- | ----------------------- |
+| GET         | `/contacts/`                    | Get all user`s contacts |
+| GET         | `/contacts/:contactId`          | Get contact by id       |
+| POST        | `/contacts/`                    | Add contact             |
+| DELETE      | `/contacts/:contactId`          | Delete contact          |
+| PUT         | `/contacts/:contactId`          | Update contact          |
+| PATCH       | `/contacts/:contactId/favorite` | Update contact`s status |
