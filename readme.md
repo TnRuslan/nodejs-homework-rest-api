@@ -13,6 +13,7 @@
 1. Clone the repository;
 2. Install the dependencies: `npm install`
 3. Run the following command: `npm start`;
+---
 
 <div align="center">
 
