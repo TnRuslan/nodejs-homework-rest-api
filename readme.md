@@ -10,7 +10,8 @@
 
 1. Clone the repository;
 2. Install the dependencies: `npm install`
-3. Run the following command: `npm start`;
+3. Run in dev: `npm run start:dev`
+4. Run the following command: `npm start`;
 ---
 
 <div align="center">
